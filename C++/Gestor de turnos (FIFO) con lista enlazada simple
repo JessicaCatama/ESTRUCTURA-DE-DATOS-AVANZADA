@@ -1,0 +1,172 @@
+#include <iostream>
+using namespace std;
+
+struct Turno {
+    int numero;
+    string nombre;
+};
+
+struct Node {
+    Turno data;
+    Node* next;
+};
+
+Node* head = NULL;
+
+//inicia a cargar turnos iniciales desde arreglo
+void cargarInicial() {
+
+    Turno datos[3] = {
+        {1, "Ana"},
+        {2, "Luis"},
+        {3, "Sara"}
+    };
+
+    for (int i = 0; i < 3; i++) {
+        Node* nuevo = new Node;
+        nuevo->data = datos[i];
+        nuevo->next = NULL;
+
+        if (head == NULL) {
+            head = nuevo;
+        } else {
+            Node* aux = head;
+
+            while (aux->next != NULL) {
+                aux = aux->next;
+            }
+
+            aux->next = nuevo;
+        }
+    }
+
+    cout << "Turnos cargados" << endl;
+}
+
+//registra los turnos agregandolos al final de la lista
+void registrarTurno(int numero, string nombre) {
+
+    Node* nuevo = new Node;
+    nuevo->data.numero = numero;
+    nuevo->data.nombre = nombre;
+    nuevo->next = NULL;
+
+    if (head == NULL) {
+        head = nuevo;
+    } else {
+        Node* aux = head;
+
+        while (aux->next != NULL) {
+            aux = aux->next;
+        }
+
+        aux->next = nuevo;
+    }
+
+    cout << "Registrado: " << numero << "-" << nombre << endl;
+}
+
+//elimina el primer turno
+void atenderTurno() {
+
+    if (head == NULL) {
+        cout << "No hay turnos." << endl;
+    } else {
+        cout << "Atendido: " << head->data.numero << "-" << head->data.nombre << endl;
+        head = head->next;
+    }
+}
+
+//inicia buscador de turno por número
+void buscarTurno(int numero) {
+
+    Node* aux = head;
+
+    while (aux != NULL) {
+
+        if (aux->data.numero == numero) {
+            cout << "ENCONTRADO: " << aux->data.numero << "-" << aux->data.nombre << endl;
+            return;
+        }
+
+        aux = aux->next;
+    }
+
+    cout << "NO ENCONTRADO" << endl;
+}
+
+void imprimirFila() {
+
+    Node* aux = head;
+
+    cout << "Fila: [";
+
+    while (aux != NULL) {
+
+        cout << aux->data.numero << "-" << aux->data.nombre;
+
+        if (aux->next != NULL) {
+            cout << ", ";
+        }
+
+        aux = aux->next;
+    }
+
+    cout << "]" << endl;
+}
+
+int main() {
+
+    int opcion;
+
+    do {
+
+        cout << "\n1. Cargar turnos iniciales (desde arreglo)" << endl;
+        cout << "2. Registrar turno (agregar al final)" << endl;
+        cout << "3. Atender turno (eliminar al inicio)" << endl;
+        cout << "4. Buscar turno (por numero)" << endl;
+        cout << "5. Imprimir fila" << endl;
+        cout << "0. Salir" << endl;
+
+        cin >> opcion;
+
+        if (opcion == 1) {
+            cargarInicial();
+        }
+
+        if (opcion == 2) {
+
+            int num;
+            string nombre;
+
+            cout << "Numero: ";
+            cin >> num;
+
+            cout << "Nombre: ";
+            cin >> nombre;
+
+            registrarTurno(num, nombre);
+        }
+
+        if (opcion == 3) {
+            atenderTurno();
+        }
+
+        if (opcion == 4) {
+
+            int num;
+
+            cout << "Numero a buscar: ";
+            cin >> num;
+
+            buscarTurno(num);
+        }
+
+        if (opcion == 5) {
+            imprimirFila();
+        }
+
+    } while (opcion != 0);
+
+    return 0;
+}
